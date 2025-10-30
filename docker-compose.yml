@@ -2,3 +2,5 @@ services:
   ros:
     build: .
     tty: true
+    volumes:
+      - ./ros2_ws:/root/ros2_ws
