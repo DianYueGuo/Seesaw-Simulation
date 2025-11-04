@@ -16,7 +16,7 @@ class SeesawSimulation(Node):
         self.__slider_angular_velocity_publisher = self.create_publisher(Float64, 'slider_angular_velocity_rad_per_s', 10)
 
         self.__publisher_loop_frequency_Hz = 60.0
-        self.__publisher_loop_timer = self.create_timer(1 / self.__publisher_frequency_Hz, self.__publisher_loop_cb)
+        self.__publisher_loop_timer = self.create_timer(1 / self.__publisher_loop_frequency_Hz, self.__publisher_loop_cb)
 
         self.__applied_torque_subscription = self.create_subscription(
             Float64,
@@ -41,19 +41,19 @@ class SeesawSimulation(Node):
 
     def __publisher_loop_cb(self):
         slider_radial_position_msg = Float64()
-        slider_radial_position_msg.data = self.__radial_position_m
+        slider_radial_position_msg.data = float(self.__radial_position_m)
         self.__slider_radial_position_publisher.publish(slider_radial_position_msg)
 
         slider_radial_velocity_msg = Float64()
-        slider_radial_position_msg.data = self.__radial_velocity_m_per_s
+        slider_radial_position_msg.data = float(self.__radial_velocity_m_per_s)
         self.__slider_radial_velocity_publisher.publish(slider_radial_velocity_msg)
 
         slider_angular_position_msg = Float64()
-        slider_angular_position_msg.data = self.__angular_position_rad
+        slider_angular_position_msg.data = float(self.__angular_position_rad)
         self.__slider_angular_position_publisher.publish(slider_angular_position_msg)
 
         slider_angular_velocity_msg = Float64()
-        slider_angular_velocity_msg.data = self.__angular_velocity_rad_per_s
+        slider_angular_velocity_msg.data = float(self.__angular_velocity_rad_per_s)
         self.__slider_angular_velocity_publisher.publish(slider_angular_velocity_msg)
 
     def __applied_torque_subscription_cb(self, msg):
