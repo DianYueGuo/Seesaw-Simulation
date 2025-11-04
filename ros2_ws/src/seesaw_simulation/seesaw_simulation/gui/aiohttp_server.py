@@ -11,6 +11,9 @@ class AIOHTTPServer:
         return web.FileResponse(path=Path(seesaw_simulation.gui.__file__).parent/"index.html")
 
     def send_topic(self, topic_name, msg):
+        if not hasattr(self, "websocket_response") or self.websocket_response.closed:
+            return
+
         asyncio.run_coroutine_threadsafe(
             self.websocket_response.send_str(json.dumps({"type": "topic", "data": {"topic_name": topic_name, "msg": msg}})),
             self.event_loop
