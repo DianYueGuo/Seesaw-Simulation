@@ -92,6 +92,11 @@ class SeesawSimulation(Node):
             self.__angular_velocity_rad_per_s = max(self.__angular_velocity_rad_per_s, -self.__max_angular_velocity_rad_per_s)
 
         if self.__radial_position_m >= self.__slider_limit_length_m and self.__radial_velocity_m_per_s > 0:
+            self.__radial_position_m = self.__slider_limit_length_m
+            self.__radial_velocity_m_per_s = 0
+
+        if self.__radial_position_m <= -self.__slider_limit_length_m and self.__radial_velocity_m_per_s < 0:
+            self.__radial_position_m = -self.__slider_limit_length_m
             self.__radial_velocity_m_per_s = 0
 
         self.__radial_position_m += self.__radial_velocity_m_per_s * self.__simulation_time_delta_s
