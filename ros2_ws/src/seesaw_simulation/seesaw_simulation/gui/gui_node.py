@@ -21,13 +21,6 @@ class GUINode(Node):
                 qos_profile=10
             )
 
-        self.__slider_radial_velocity_subscribers = self.create_subscription(
-                msg_type=Float64,
-                topic="slider_radial_velocity_m_per_s",
-                callback=self.__slider_radial_velocity_subscription_callback,
-                qos_profile=10
-            )
-
         self.__slider_angular_position_subscribers = self.create_subscription(
                 msg_type=Float64,
                 topic="slider_angular_position_rad",
@@ -35,24 +28,11 @@ class GUINode(Node):
                 qos_profile=10
             )
 
-        self.__slider_angular_velocity_subscribers = self.create_subscription(
-                msg_type=Float64,
-                topic="slider_angular_velocity_rad_per_s",
-                callback=self.__slider_angular_velocity_subscription_callback,
-                qos_profile=10
-            )
-
     def __slider_radial_position_subscription_callback(self, msg):
         self.aiohttp_server.send_topic("slider_radial_position_m", msg.data)
 
-    def __slider_radial_velocity_subscription_callback(self, msg):
-        self.aiohttp_server.send_topic("slider_radial_velocity_m_per_s", msg.data)
-
     def __slider_angular_position_subscription_callback(self, msg):
         self.aiohttp_server.send_topic("slider_angular_position_rad", msg.data)
-
-    def __slider_angular_velocity_subscription_callback(self, msg):
-        self.aiohttp_server.send_topic("slider_angular_velocity_rad_per_s", msg.data)
 
     def __msg_callback(self, msg):
         print(msg)

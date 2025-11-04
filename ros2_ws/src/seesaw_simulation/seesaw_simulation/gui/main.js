@@ -8,12 +8,8 @@ websocket.onmessage = (event) => {
     if (msg_json_object.type == "topic") {
         if (msg_json_object.data.topic_name == "slider_radial_position_m") {
             var slider_radial_position_msg = msg_json_object.data.msg;
-        } else if (msg_json_object.data.topic_name == "slider_radial_velocity_m_per_s") {
-            var slider_radial_velocity_msg = msg_json_object.data.msg;
         } else if (msg_json_object.data.topic_name == "slider_angular_position_rad") {
             var slider_angular_position_msg = msg_json_object.data.msg;
-        } else if (msg_json_object.data.topic_name == "slider_angular_velocity_rad_per_s") {
-            var slider_angular_velocity_msg = msg_json_object.data.msg;
         }
     }
 };
