@@ -2,5 +2,7 @@ services:
   ros:
     build: .
     tty: true
+    ports:
+      - 80:80
     volumes:
       - ./ros2_ws:/root/ros2_ws

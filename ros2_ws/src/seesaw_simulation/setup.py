@@ -24,7 +24,8 @@ setup(
     },
     entry_points={
         'console_scripts': [
-            "seesaw_simulation = seesaw_simulation.seesaw_simulation:main"
+            "seesaw_simulation = seesaw_simulation.seesaw_simulation:main",
+            "gui_node = seesaw_simulation.gui.gui_node:main",
         ],
     },
 )
