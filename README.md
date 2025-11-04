@@ -33,3 +33,12 @@ You can run `ros2 topic list` to see the list of all the topics present:
 /seesaw_simulation/slider_radial_velocity_m_per_s
 ```
 You can run `ros2 topic echo <topic_name>` to see the data of the topics.
+
+## Your Task
+
+1. Fork this repository to your Github account.
+1. Clone your forked repository to your local machine.
+1. Create your branch `git switch -c <your-branch-name>` and start developing from this branch.
+1. Create your ROS2 package in `ros2_ws/src`.
+1. Create a ROS2 node to control the seesaw such that the slider is stablized around the center.
+1. Practice git commands while developing: `git log`, `git status`, `git diff`, `git add`, `git commit`, `git show`, and `git push`.
