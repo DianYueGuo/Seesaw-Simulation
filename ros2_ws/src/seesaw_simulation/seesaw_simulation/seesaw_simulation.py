@@ -3,6 +3,8 @@ from rclpy.node import Node
 
 from std_msgs.msg import Float64
 
+import math
+
 
 class SeesawSimulation(Node):
 
@@ -14,9 +16,37 @@ class SeesawSimulation(Node):
         self.__simulation_time_delta_s = 0.01
         self.__simulation_loop_timer = self.create_timer(self.__simulation_time_delta_s, self.__simulation_loop_cb)
 
-    def __simulation_loop_cb(self):
-        pass
+        self.__standard_gravity_m_per_s_squared = 9.80665
+        self.__slider_mass_kg = 1.0
+        self.__slider_limit_length_m = 1.0
 
+        self.__radial_position_m = 0.5
+        self.__radial_velocity_m_per_s = 0.0
+        self.__angular_position_rad = 0.0
+        self.__angular_velocity_rad_per_s = 0.0
+
+        self.__applied_torque_N_m = 0.0
+
+    def __simulation_loop_cb(self):
+        radial_acceleration_m_per_s_squared = (
+            - self.__standard_gravity_m_per_s_squared * math.sin(self.__angular_position_rad)
+            + self.__radial_position_m * self.__angular_velocity_rad_per_s**2
+        )
+
+        angular_acceleration_rad_per_s_squared = (
+            self.__applied_torque_N_m / self.__slider_mass_kg / self.__radial_position_m
+            - self.__standard_gravity_m_per_s_squared * math.cos(self.__angular_position_rad)
+            - 2 * self.__radial_velocity_m_per_s * self.__angular_velocity_rad_per_s
+        ) / self.__radial_position_m
+
+        self.__radial_velocity_m_per_s += radial_acceleration_m_per_s_squared * self.__simulation_time_delta_s
+        self.__angular_velocity_rad_per_s += angular_acceleration_rad_per_s_squared * self.__simulation_time_delta_s
+
+        if self.__radial_position_m >= self.__slider_limit_length_m and self.__radial_velocity_m_per_s > 0:
+            self.__radial_velocity_m_per_s = 0
+
+        self.__radial_position_m += self.__radial_velocity_m_per_s * self.__simulation_time_delta_s
+        self.__angular_position_rad += self.__angular_velocity_rad_per_s * self.__simulation_time_delta_s
 
 def main(args=None):
     rclpy.init(args=args)
