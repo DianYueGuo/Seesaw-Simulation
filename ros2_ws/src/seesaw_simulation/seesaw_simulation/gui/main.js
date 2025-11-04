@@ -82,3 +82,25 @@ if (document.readyState === "loading") {
 } else {
   draw();
 }
+
+document.addEventListener("keydown", (event) => {
+    switch (event.key) {
+        case "ArrowRight":
+            websocket.send(JSON.stringify({type: "topic", data: {topic_name: "applied_torque_N_m", msg: 10}}));
+            break;
+        case "ArrowLeft":
+            websocket.send(JSON.stringify({type: "topic", data: {topic_name: "applied_torque_N_m", msg: -10}}));
+            break;
+    }
+});
+
+document.addEventListener("keyup", (event) => {
+    switch (event.key) {
+        case "ArrowRight":
+            websocket.send(JSON.stringify({type: "topic", data: {topic_name: "applied_torque_N_m", msg: 0}}));
+            break;
+        case "ArrowLeft":
+            websocket.send(JSON.stringify({type: "topic", data: {topic_name: "applied_torque_N_m", msg: 0}}));
+            break;
+    }
+});

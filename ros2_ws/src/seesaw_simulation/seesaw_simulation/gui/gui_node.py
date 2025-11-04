@@ -28,6 +28,8 @@ class GUINode(Node):
                 qos_profile=10
             )
 
+        self.__applied_torque_publisher = self.create_publisher(Float64, 'applied_torque_N_m', 10)
+
     def __slider_radial_position_subscription_callback(self, msg):
         self.aiohttp_server.send_topic("slider_radial_position_m", msg.data)
 
@@ -39,8 +41,11 @@ class GUINode(Node):
         msg_json_object = json.loads(msg)
 
         if msg_json_object["type"] == "topic":
-            if msg_json_object["data"]["topic_name"] == "":
-                pass
+            if msg_json_object["data"]["topic_name"] == "applied_torque_N_m":
+                msg = Float64()
+                msg.data = float(msg_json_object["data"]["msg"])
+
+                self.__applied_torque_publisher.publish(msg)
 
 def main(args=None):
     rclpy.init(args=args)
