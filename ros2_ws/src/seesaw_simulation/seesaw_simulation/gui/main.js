@@ -28,10 +28,15 @@ function draw() {
   // clear
   ctx.clearRect(0, 0, w, h);
 
+  ctx.beginPath();
+  ctx.arc(cx, cy, Math.max(3, 0.007 * Math.min(w, h)), 0, Math.PI * 2);
+  ctx.fillStyle = "rgba(0, 0, 0, 1)";
+  ctx.fill();
+
   // rod (line)
   ctx.beginPath();
-  ctx.moveTo(cx, cy);
-  ctx.lineTo(x, y);
+  ctx.moveTo(cx - pxPerM * Math.cos(slider_angular_position_rad), cy + pxPerM * Math.sin(slider_angular_position_rad));
+  ctx.lineTo(cx + pxPerM * Math.cos(slider_angular_position_rad), cy - pxPerM * Math.sin(slider_angular_position_rad));
   ctx.lineWidth = 2;
   ctx.strokeStyle = "#000";
   ctx.stroke();
