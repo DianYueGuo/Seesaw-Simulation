@@ -28,6 +28,9 @@ class SeesawSimulation(Node):
         self.__simulation_time_delta_s = 0.01
         self.__simulation_loop_timer = self.create_timer(self.__simulation_time_delta_s, self.__simulation_loop_cb)
 
+        self.__sliding_friction_coefficient = 1.0
+        self.__rotation_friction_coefficient = 1.0
+
         self.__standard_gravity_m_per_s_squared = 9.80665
         self.__slider_mass_kg = 1.0
         self.__slider_limit_length_m = 1.0
@@ -63,13 +66,15 @@ class SeesawSimulation(Node):
         radial_acceleration_m_per_s_squared = (
             - self.__standard_gravity_m_per_s_squared * math.sin(self.__angular_position_rad)
             + self.__radial_position_m * self.__angular_velocity_rad_per_s**2
+            - self.__sliding_friction_coefficient * self.__radial_velocity_m_per_s / self.__slider_mass_kg
         )
 
         angular_acceleration_rad_per_s_squared = (
             self.__applied_torque_N_m / self.__slider_mass_kg / self.__radial_position_m
             - self.__standard_gravity_m_per_s_squared * math.cos(self.__angular_position_rad)
             - 2 * self.__radial_velocity_m_per_s * self.__angular_velocity_rad_per_s
-        ) / self.__radial_position_m
+            - self.__rotation_friction_coefficient * self.__angular_velocity_rad_per_s / self.__slider_mass_kg / self.__radial_position_m
+        ) / self.__radial_position_m \
 
         self.__radial_velocity_m_per_s += radial_acceleration_m_per_s_squared * self.__simulation_time_delta_s
         self.__angular_velocity_rad_per_s += angular_acceleration_rad_per_s_squared * self.__simulation_time_delta_s
