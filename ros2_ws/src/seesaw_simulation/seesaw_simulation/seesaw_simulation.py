@@ -35,6 +35,9 @@ class SeesawSimulation(Node):
         self.__slider_mass_kg = 1.0
         self.__slider_limit_length_m = 1.0
 
+        self.__max_radial_acceleration_m_per_s_squared = 50.0
+        self.__max_angular_acceleration_rad_per_s_squared = math.pi * 10.0
+
         self.__max_radial_velocity_m_per_s = 5.0
         self.__max_angular_velocity_rad_per_s = math.pi * 4.0
 
@@ -71,13 +74,21 @@ class SeesawSimulation(Node):
             + self.__radial_position_m * self.__angular_velocity_rad_per_s**2
             - self.__sliding_friction_coefficient * self.__radial_velocity_m_per_s / self.__slider_mass_kg
         )
+        if radial_acceleration_m_per_s_squared > 0:
+            radial_acceleration_m_per_s_squared = min(radial_acceleration_m_per_s_squared, self.__max_radial_acceleration_m_per_s_squared)
+        else:
+            radial_acceleration_m_per_s_squared = max(radial_acceleration_m_per_s_squared, -self.__max_radial_acceleration_m_per_s_squared)
 
         angular_acceleration_rad_per_s_squared = (
             self.__applied_torque_N_m / self.__slider_mass_kg / self.__radial_position_m
             - self.__standard_gravity_m_per_s_squared * math.cos(self.__angular_position_rad)
             - 2 * self.__radial_velocity_m_per_s * self.__angular_velocity_rad_per_s
             - self.__rotation_friction_coefficient * self.__angular_velocity_rad_per_s / self.__slider_mass_kg / self.__radial_position_m
-        ) / self.__radial_position_m \
+        ) / self.__radial_position_m
+        if angular_acceleration_rad_per_s_squared > 0:
+            angular_acceleration_rad_per_s_squared = min(angular_acceleration_rad_per_s_squared, self.__max_angular_acceleration_rad_per_s_squared)
+        else:
+            angular_acceleration_rad_per_s_squared = max(angular_acceleration_rad_per_s_squared, -self.__max_angular_acceleration_rad_per_s_squared)
 
         self.__radial_velocity_m_per_s += radial_acceleration_m_per_s_squared * self.__simulation_time_delta_s
         if self.__radial_velocity_m_per_s > 0:
