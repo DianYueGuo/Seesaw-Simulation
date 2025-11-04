@@ -35,6 +35,9 @@ class SeesawSimulation(Node):
         self.__slider_mass_kg = 1.0
         self.__slider_limit_length_m = 1.0
 
+        self.__max_radial_velocity_m_per_s = 5.0
+        self.__max_angular_velocity_rad_per_s = math.pi * 4.0
+
         self.__radial_position_m = 0.5
         self.__radial_velocity_m_per_s = 0.0
         self.__angular_position_rad = 0.0
@@ -77,7 +80,16 @@ class SeesawSimulation(Node):
         ) / self.__radial_position_m \
 
         self.__radial_velocity_m_per_s += radial_acceleration_m_per_s_squared * self.__simulation_time_delta_s
+        if self.__radial_velocity_m_per_s > 0:
+            self.__radial_velocity_m_per_s = min(self.__radial_velocity_m_per_s, self.__max_radial_velocity_m_per_s)
+        else:
+            self.__radial_velocity_m_per_s = max(self.__radial_velocity_m_per_s, -self.__max_radial_velocity_m_per_s)
+
         self.__angular_velocity_rad_per_s += angular_acceleration_rad_per_s_squared * self.__simulation_time_delta_s
+        if self.__angular_velocity_rad_per_s > 0:
+            self.__angular_velocity_rad_per_s = min(self.__angular_velocity_rad_per_s, self.__max_angular_velocity_rad_per_s)
+        else:
+            self.__angular_velocity_rad_per_s = max(self.__angular_velocity_rad_per_s, -self.__max_angular_velocity_rad_per_s)
 
         if self.__radial_position_m >= self.__slider_limit_length_m and self.__radial_velocity_m_per_s > 0:
             self.__radial_velocity_m_per_s = 0
