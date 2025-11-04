@@ -9,7 +9,7 @@ from std_msgs.msg import Float64
 class GUINode(Node):
 
     def __init__(self):
-        super().__init__('gui_node')
+        super().__init__('gui_node', namespace='seesaw_simulation')
 
         self.aiohttp_server = AIOHTTPServer(self.__msg_callback)
         self.aiohttp_server.start_threading()

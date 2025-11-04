@@ -9,7 +9,7 @@ import math
 class SeesawSimulation(Node):
 
     def __init__(self):
-        super().__init__('seesaw_simulation')
+        super().__init__('seesaw_simulation', namespace='seesaw_simulation')
         self.__slider_radial_position_publisher = self.create_publisher(Float64, 'slider_radial_position_m', 10)
         self.__slider_radial_velocity_publisher = self.create_publisher(Float64, 'slider_radial_velocity_m_per_s', 10)
         self.__slider_angular_position_publisher = self.create_publisher(Float64, 'slider_angular_position_rad', 10)
